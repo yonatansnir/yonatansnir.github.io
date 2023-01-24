@@ -1,0 +1,109 @@
+---
+title: תבניות עיצוב בג'אווה סקריפט – Observer Pattern?
+date: '2022-06-20'
+tags: ['תבניות עיצוב', 'JavaScript', 'Design Patterns', 'Observer Pattern']
+draft: false
+summary: תבנית הצופה – Observer Pattern היא תבנית שעוזרת לנו להגדיר מערכת יחסים בין אובייקט אחד שנקרא "הנושא" לבין כמה אובייקטים אחרים שתלויים בו ונקראים "צופים". את אובייקט הנושא לא מעניין מה קורה עם האובייקטים שצופים בו והוא לא תלוי בהם, אך הם כן תלויים בו ומחכים שיקרא להם באמצעות אחת הפונקציות שלו.
+images: []
+layout: PostLayout
+canonicalUrl:
+---
+
+תבנית הצופה – Observer Pattern היא תבנית שעוזרת לנו להגדיר מערכת יחסים בין אובייקט אחד שנקרא "הנושא" לבין כמה אובייקטים אחרים שתלויים בו ונקראים "צופים". את אובייקט הנושא לא מעניין מה קורה עם האובייקטים שצופים בו והוא לא תלוי בהם, אך הם כן תלויים בו ומחכים שיקרא להם באמצעות אחת הפונקציות שלו.
+
+זאת התבנית האהובה עליי. תבנית הצופה משמשת בדר"כ לטיפול באירועים כמו לחיצה על כפתור מסויים – שגורם להפעלת אלמנטים אחרים באפליקציה. זאת אחת התבניות הנפוצות ביותר בממשקי משתמש ובספריות כמו jQuery, וריאקט.
+
+אז איך מיישמים אותה בצורה הפשוטה ביותר? דבר ראשון נצטרך לכתוב את אובייקט הנושא שלנו ובתוכו מערך של כל הצופים שלו:
+
+```JavaScript
+function Subject(){
+    this.observers = [];
+}
+```
+
+אחרי שכתבנו את אובייקט הנושא, נרצה להוסיף לו כמה מתודות.
+
+```JavaScript
+Subject.prototype = {
+   subscribe: function(fn){
+       this.observers.push(fn)
+   },
+   unsubscribe: function(fnToRemove){
+       this.observers = this.observers.filter(fn => {
+          if(fn != fnToRemove){
+              return fn;
+           }
+       })
+   },
+   fire: function(){
+      this.observers.forEach(fn => fn());
+    }
+}
+```
+
+הוספנו שלוש מתודות (פונקציות) לאובייקט הנושא שלנו. הראשונה `subscribe` מוסיפה פונקציה למערך הצופים. השניה `unsubscribe` מסירה פונקציה ממערך הצופים. האחרונה `fire` קוראת לכל האובייקטים שצופים באובייקט שלנו.
+
+וזהו בערך. זאת התבנית שלנו והיא מוכנה לשימוש. בואו נבדוק אותה עכשיו! ניצור את אובייקט הנושא שלנו, ונכתוב עוד 2 אובייקטים ש"צופים" בו.
+
+```JavaScript
+const subject = new Subject(); // We create the subject object.
+
+function  Observer1(){
+    console.log('Observer 1 has called!')
+}
+function  Observer2(){
+    console.log('Observer 2 has called!')
+}
+```
+
+יש לנו את אובייקט הנושא, ויש לנו שני אובייקטים (פונקציות בתכלס) שאמורות לצפות בו ולהגיב לשינויים בו. אבל… עדיין לא הוספנו אותן למערך הצופים שלנו זוכרים? בואו נרשום את הפונקציות האלו בתור "צופות" באמצעות המתודה `subscribe` שכתבנו
+
+```JavaScript
+subject.subscribe(Observer1);
+subject.subscribe(Observer2);
+```
+
+עכשיו הפונקציות האלו רשומות אצל האובייקט הנושא, ונוכל להעיר אותן בכל פעם שנעשה שינוי באובייקט הזה באמצעות המתודה `fire` שכתבנו:
+
+```JavaScript
+subject.fire();
+```
+
+אם נריץ את הקוד, הפלט ב-console יהיה:
+
+```
+Observer 1 has called!
+Observer 2 has called!
+```
+
+אם נרצה להסיר צופה מהרשימה:
+
+```JavaScript
+subject.unsubscribe(Observer1);
+```
+
+פשוט וקל. עם ES6:
+
+```JavaScript
+class Subject {
+    constructor(){
+        this.observers = [];
+   };
+
+    subscribe(fn){
+       this.observers.push(fn)
+    };
+
+    unsubscribe(fnToRemove){
+       this.observers = this.observers.filter(fn => {
+          if(fn != fnToRemove){
+              return fn;
+           }
+       })
+   };
+
+   fire(){
+      this.observers.forEach(fn => fn());
+    }
+}
+```
