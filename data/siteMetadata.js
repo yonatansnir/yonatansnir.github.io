@@ -10,12 +10,12 @@ const siteMetadata = {
 	siteLogo: '/static/images/logo.png',
 	image: '/static/images/avatar.png',
 	socialBanner: '/static/images/twitter-card.png',
-	email: 'address@yoursite.com',
-	github: 'https://github.com',
+	email: 'yonatan941@gmail.com',
+	github: 'https://github.com/yonatansnir',
 	twitter: 'https://twitter.com/Twitter',
-	facebook: 'https://facebook.com',
+	facebook: 'https://www.facebook.com/yonatan941/',
 	youtube: 'https://youtube.com',
-	linkedin: 'https://www.linkedin.com',
+	linkedin: 'https://www.linkedin.com/in/yonatan-snir/',
 	locale: 'he-IL',
 	analytics: {
 		// If you want to use an analytics provider you have to add it to the

@@ -89,7 +89,7 @@ export default function PostLayout({
 												<dd className="text-gray-900 dark:text-gray-100">
 													{author.name}
 												</dd>
-												<dt className="sr-only">
+												{/* <dt className="sr-only">
 													Twitter
 												</dt>
 												<dd>
@@ -106,7 +106,7 @@ export default function PostLayout({
 															)}
 														</Link>
 													)}
-												</dd>
+												</dd> */}
 											</dl>
 										</li>
 									))}
